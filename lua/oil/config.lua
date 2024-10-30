@@ -101,6 +101,10 @@ local default_config = {
       { "type", "asc" },
       { "name", "asc" },
     },
+    -- Return a highlight group name for each entry
+    highlight = function(entry, is_link_target)
+      return nil
+    end,
   },
   -- Extra arguments to pass to SCP when moving/copying files over SSH
   extra_scp_args = {},
@@ -267,6 +271,7 @@ local M = {}
 ---@field natural_order boolean
 ---@field case_insensitive boolean
 ---@field sort oil.SortSpec[]
+---@field highlight fun(entry: oil.Entry, is_link_target: boolean): string|nil
 
 ---@class (exact) oil.SetupViewOptions
 ---@field show_hidden? boolean Show files and directories that start with "."
@@ -275,6 +280,7 @@ local M = {}
 ---@field natural_order? boolean Sort file names in a more intuitive order for humans. Is less performant, so you may want to set to false if you work with large directories.
 ---@field case_insensitive? boolean Sort file and directory names case insensitive
 ---@field sort? oil.SortSpec[] Sort order for the file list
+---@field highlight fun(entry: oil.Entry, is_link_target: boolean): string|nil Return a highlight group name for each entry
 
 ---@class (exact) oil.SortSpec
 ---@field [1] string

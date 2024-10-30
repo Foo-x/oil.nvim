@@ -700,10 +700,18 @@ M.format_entry_cols = function(entry, column_defs, col_width, adapter)
   end
   -- Always add the entry name at the end
   local entry_type = entry[FIELD_TYPE]
+  local external_entry = {
+    id = entry[FIELD_ID],
+    name = name,
+    parsed_name = name,
+    type = entry_type,
+    meta = meta,
+  }
+  local highlight = config.view_options.highlight
   if entry_type == "directory" then
-    table.insert(cols, { name .. "/", "OilDir" })
+    table.insert(cols, { name .. "/", highlight(external_entry, false) or "OilDir" })
   elseif entry_type == "socket" then
-    table.insert(cols, { name, "OilSocket" })
+    table.insert(cols, { name, highlight(external_entry, false) or "OilSocket" })
   elseif entry_type == "link" then
     local link_text
     if meta then
@@ -719,12 +727,12 @@ M.format_entry_cols = function(entry, column_defs, col_width, adapter)
       end
     end
 
-    table.insert(cols, { name, "OilLink" })
+    table.insert(cols, { name, highlight(external_entry, false) or "OilLink" })
     if link_text then
-      table.insert(cols, { link_text, "OilLinkTarget" })
+      table.insert(cols, { link_text, highlight(external_entry, true) or "OilLinkTarget" })
     end
   else
-    table.insert(cols, { name, "OilFile" })
+    table.insert(cols, { name, highlight(external_entry, false) or "OilFile" })
   end
   return cols
 end
